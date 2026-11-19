@@ -63,12 +63,24 @@ petit indice <br/>
 <p>un petit mot doux d'un auteur très connus<br/>
 <a href="https://i.etsystatic.com/26931066/c/2268/2268/0/0/il/92f06c/3016044841/il_300x300.3016044841_67tk.jpg">imprègne toi de l'auteur avec la citation</a>
 	</div>
-	<div id="contenu-protege" style="display: none;">
+	<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accès protégé</title>
+</head>
+<body>
+
+  <!-- Contenu visible uniquement si connecté, approuvé et session < 10 min -->
+  <div id="contenu-protege" style="display: none;">
     <h2>Bienvenue sur l'espace protégé</h2>
     <p>Votre compte est validé.</p>
     <button type="button" id="btn-deconnexion">Se déconnecter</button>
   </div>
-<div id="zone-inscription">
+
+  <!-- Zone d'inscription affichée par défaut -->
+  <div id="zone-inscription">
     <h2>Inscription obligatoire</h2>
     <form id="form-inscription">
       <input type="email" id="email-inscription" placeholder="Adresse e-mail" required />
@@ -101,16 +113,10 @@ petit indice <br/>
       measurementId: "G-YRQCZ83JYX"
     };
 
-    // Initialisation Firebase
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
     const db = getFirestore(app);
-
-    // Session conservée uniquement pendant la session de l'onglet/navigateur
-    setPersistence(auth, browserSessionPersistence).catch((error) => {
-      console.error("Erreur de persistance :", error);
-    });
 
     const DUREE_MAX_MS = 10 * 60 * 1000; // 10 minutes
     const CLE_SESSION_START = "firebase_session_start";
@@ -187,6 +193,12 @@ petit indice <br/>
         zoneInscription.style.display = "block";
         messageInscription.textContent = "Votre compte est en attente d'approbation.";
       }
+    }
+
+    try {
+      await setPersistence(auth, browserSessionPersistence);
+    } catch (error) {
+      console.error("Erreur de persistance :", error);
     }
 
     onAuthStateChanged(auth, (user) => {
