@@ -187,7 +187,7 @@ Je bois le feu et pas de l’eau, je suis un démon et pas un ange</div>
       <img class="portrait" src="babo.jpg" alt="Petit indice" onerror="this.remove()" />
     </section>
 
-    <footer>BORO 700 · fiche privée</footer>
+<footer>BORO 700 · fiche privée</footer>
   </main>
 </div>
 
@@ -207,7 +207,19 @@ Je bois le feu et pas de l’eau, je suis un démon et pas un ange</div>
         <input type="email" id="email-connexion" placeholder="nom@exemple.com" autocomplete="email" required /></div>
       <div><label for="password-connexion">Mot de passe</label>
         <input type="password" id="password-connexion" placeholder="••••••••" autocomplete="current-password" required /></div>
+      <button type="button" id="btn-mdp-oublie" class="btn-lien-oublie" style="background:none;border:none;color:inherit;text-decoration:underline;cursor:pointer;align-self:flex-end;font-size:0.85rem;padding:0;">Mot de passe oublié</button>
       <button type="submit" class="btn">Se connecter</button>
+
+      <div id="bloc-reset-mdp" class="masque" style="margin-top:12px;padding:12px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);display:flex;flex-direction:column;gap:10px;">
+        <p style="font-size:0.84rem;line-height:1.45;margin:0;opacity:0.9;">
+          Un e-mail de réinitialisation a été envoyé à ton adresse. Clique sur le lien reçu dans ta boîte mail pour choisir ton mot de passe, puis entre ton nouveau mot de passe ci-dessous :
+        </p>
+        <div>
+          <label for="nouveau-mot-de-passe">Nouveau mot de passe</label>
+          <input type="password" id="nouveau-mot-de-passe" placeholder="Minimum 6 caractères" autocomplete="new-password" minlength="6" />
+        </div>
+        <button type="button" id="btn-valider-nouveau-mdp" class="btn">Enregistrer et me connecter</button>
+      </div>
     </form>
 
     <form id="form-inscription" class="masque">
@@ -224,7 +236,7 @@ Je bois le feu et pas de l’eau, je suis un démon et pas un ange</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserSessionPersistence, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, setPersistence, browserSessionPersistence, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -249,9 +261,10 @@ const $ = (id) => document.getElementById(id);
 
 const ongletConnexion = $("onglet-connexion"), ongletInscription = $("onglet-inscription");
 const formConnexion = $("form-connexion"), formInscription = $("form-inscription");
+const btnMdpOublie = $("btn-mdp-oublie"), blocResetMdp = $("bloc-reset-mdp"), btnValiderNouveauMdp = $("btn-valider-nouveau-mdp");
 const messageAcces = $("message-acces"), contenuProtege = $("contenu-protege"), zoneAcces = $("zone-acces");
 
-let chrono = null, observateur = null, titreFait = false;
+let chrono = null, observateur = null, titreFait = false, emailPourReinit = "";
 
 function afficherMessage(texte, type = "info") {
   messageAcces.textContent = texte || "";
@@ -277,10 +290,53 @@ function messageErreur(e) {
     "auth/email-already-in-use": "Cette adresse e-mail a déjà un compte.",
     "auth/weak-password": "Mot de passe trop court (6 caractères minimum).",
     "auth/invalid-email": "Adresse e-mail invalide.",
+    "auth/user-not-found": "Aucun compte trouvé avec cette adresse e-mail.",
     "auth/too-many-requests": "Trop de tentatives. Réessaie dans quelques minutes."
   };
   return m[e.code] || e.message;
 }
+
+btnMdpOublie.addEventListener("click", async () => {
+  const emailInput = $("email-connexion");
+  const email = emailInput.value.trim();
+  if (!email) {
+    afficherMessage("Entre d'abord ton adresse e-mail dans le champ ci-dessus.", "erreur");
+    emailInput.focus();
+    return;
+  }
+  afficherMessage("");
+  try {
+    await sendPasswordResetEmail(auth, email);
+    emailPourReinit = email;
+    blocResetMdp.classList.remove("masque");
+    afficherMessage(`E-mail envoyé à ${email}. Clique sur le lien reçu dans ta boîte mail, puis saisis ton nouveau mot de passe ci-dessous.`, "succes");
+  } catch (err) {
+    afficherMessage(messageErreur(err), "erreur");
+  }
+});
+
+btnValiderNouveauMdp.addEventListener("click", async () => {
+  const email = $("email-connexion").value.trim() || emailPourReinit;
+  const nouveauMdp = $("nouveau-mot-de-passe").value;
+  if (!email) {
+    afficherMessage("Adresse e-mail manquante.", "erreur");
+    return;
+  }
+  if (!nouveauMdp || nouveauMdp.length < 6) {
+    afficherMessage("Entre ton nouveau mot de passe (6 caractères minimum).", "erreur");
+    return;
+  }
+  afficherMessage("");
+  try {
+    await signInWithEmailAndPassword(auth, email, nouveauMdp);
+    sessionStorage.setItem(CLE_SESSION_START, String(Date.now()));
+    $("nouveau-mot-de-passe").value = "";
+    blocResetMdp.classList.add("masque");
+    formConnexion.reset();
+  } catch (err) {
+    afficherMessage("Connexion impossible : vérifie que tu as bien cliqué sur le lien dans ton e-mail avant de valider (" + messageErreur(err) + ")", "erreur");
+  }
+});
 
 formConnexion.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -289,6 +345,7 @@ formConnexion.addEventListener("submit", async (e) => {
     await signInWithEmailAndPassword(auth, $("email-connexion").value, $("password-connexion").value);
     sessionStorage.setItem(CLE_SESSION_START, String(Date.now()));
     formConnexion.reset();
+    blocResetMdp.classList.add("masque");
   } catch (err) { afficherMessage(messageErreur(err), "erreur"); }
 });
 
