@@ -1,0 +1,51 @@
+/*Fichier decopoeme.css */
+/* Décoration du Poème de Musset	*/
+
+
+/* S'applique UNIQUEMENT à la Photo 1 */
+.image-speciale {
+  width: 300px;
+  border-radius: 15px;
+  border: 3px solid #333;
+}
+
+/* S'applique UNIQUEMENT à la Photo 2 */
+.image-2 {
+  width: 150px;
+  border-radius: 8px;
+  border: 3px solid #333;
+}
+
+/* S'applique UNIQUEMENT à la Photo 3 */
+.image-3 {
+  width: 100px;
+  border-radius: 10px;
+  border: 3px solid pink;
+}
+
+/* S'applique UNIQUEMENT à la Photo 4 */
+.image-4 {
+  width: 300px;
+  border-radius: 10px;
+  border: 3px solid #333;
+}
+
+h1
+{	/* décoration de la balise hl */
+    color : #FF0000 ;	/* Voir les couleurs sur le site https://htmlcolorcodes.com/fr/	*/
+}
+
+
+h2
+{/* décoration de la balise h2	*/
+    color : #800080 ;  /* À compléter pour avoir du violet	*/
+}
+
+
+
+
+.rime
+{	/* décoration de la balise "rime" (ne pas oublier le point devant rime) */
+    background-color : #FFFD00 ;/* A compléter pour avoir du jaune	*/
+    color : #008000 ;/* A compléter pour avoir du vert	*/
+}
