@@ -69,35 +69,267 @@ petit indice <br/>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Accès protégé</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --danger-bg: #fef2f2;
+      --danger-text: #b91c1c;
+      --success-bg: #f0fdf4;
+      --success-text: #15803d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(circle at top, #e0e7ff 0%, var(--bg) 55%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .carte {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.12);
+    }
+
+    .entete {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .entete h2 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .entete p {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .onglets {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 22px;
+      gap: 4px;
+    }
+
+    .onglet {
+      border: none;
+      background: transparent;
+      padding: 9px 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .onglet.actif {
+      background: var(--card);
+      color: var(--text);
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .champ {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    input {
+      width: 100%;
+      padding: 11px 13px;
+      font-size: 0.95rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      background: #f8fafc;
+    }
+
+    input:focus {
+      background: var(--card);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    button[type="submit"],
+    .btn-secondaire {
+      margin-top: 4px;
+      width: 100%;
+      padding: 11px 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.05s ease;
+    }
+
+    button[type="submit"] {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    button[type="submit"]:hover {
+      background: var(--primary-hover);
+    }
+
+    button:active {
+      transform: scale(0.99);
+    }
+
+    .btn-secondaire {
+      background: #f1f5f9;
+      color: var(--text);
+      border: 1px solid var(--border);
+      margin-top: 16px;
+    }
+
+    .btn-secondaire:hover {
+      background: #e2e8f0;
+    }
+
+    .message {
+      margin-top: 16px;
+      padding: 11px 13px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      line-height: 1.45;
+      display: none;
+    }
+
+    .message.visible {
+      display: block;
+    }
+
+    .message.info {
+      background: #eff6ff;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+
+    .message.succes {
+      background: var(--success-bg);
+      color: var(--success-text);
+      border: 1px solid #bbf7d0;
+    }
+
+    .message.erreur {
+      background: var(--danger-bg);
+      color: var(--danger-text);
+      border: 1px solid #fecaca;
+    }
+
+    .badge-valide {
+      display: inline-block;
+      background: var(--success-bg);
+      color: var(--success-text);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    .masque {
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
   <!-- Contenu visible uniquement si connecté, approuvé et session < 10 min -->
-  <div id="contenu-protege" style="display: none;">
-    <h2>Bienvenue sur l'espace protégé</h2>
-    <p>Votre compte est validé.</p>
-    <button type="button" id="btn-deconnexion">Se déconnecter</button>
+  <div id="contenu-protege" class="carte" style="display: none;">
+    <div class="entete">
+      <span class="badge-valide">Compte vérifié</span>
+      <h2>Espace protégé</h2>
+      <p>Votre compte est validé et votre session est active.</p>
+    </div>
+    <button type="button" id="btn-deconnexion" class="btn-secondaire">Se déconnecter</button>
   </div>
 
   <!-- Zone de connexion et d'inscription affichée si déconnecté -->
-  <div id="zone-acces">
-    <h2>Connexion (compte déjà existant)</h2>
+  <div id="zone-acces" class="carte">
+    <div class="entete">
+      <h2>Bienvenue</h2>
+      <p>Connectez-vous ou créez un compte pour continuer</p>
+    </div>
+
+    <div class="onglets" role="tablist">
+      <button type="button" id="onglet-connexion" class="onglet actif" role="tab" aria-selected="true">
+        Connexion
+      </button>
+      <button type="button" id="onglet-inscription" class="onglet" role="tab" aria-selected="false">
+        Inscription
+      </button>
+    </div>
+
+    <!-- Formulaire de connexion -->
     <form id="form-connexion">
-      <input type="email" id="email-connexion" placeholder="Adresse e-mail" required />
-      <input type="password" id="password-connexion" placeholder="Mot de passe" required />
+      <div class="champ">
+        <label for="email-connexion">Adresse e-mail</label>
+        <input type="email" id="email-connexion" placeholder="nom@exemple.com" required />
+      </div>
+      <div class="champ">
+        <label for="password-connexion">Mot de passe</label>
+        <input type="password" id="password-connexion" placeholder="••••••••" required />
+      </div>
       <button type="submit">Se connecter</button>
     </form>
 
-    <hr />
-
-    <h2>Inscription (nouveau compte)</h2>
-    <form id="form-inscription">
-      <input type="email" id="email-inscription" placeholder="Adresse e-mail" required />
-      <input type="password" id="password-inscription" placeholder="Mot de passe" required />
+    <!-- Formulaire d'inscription -->
+    <form id="form-inscription" class="masque">
+      <div class="champ">
+        <label for="email-inscription">Adresse e-mail</label>
+        <input type="email" id="email-inscription" placeholder="nom@exemple.com" required />
+      </div>
+      <div class="champ">
+        <label for="password-inscription">Mot de passe</label>
+        <input type="password" id="password-inscription" placeholder="Minimum 6 caractères" required />
+      </div>
       <button type="submit">S'inscrire</button>
     </form>
 
-    <p id="message-acces"></p>
+    <div id="message-acces" class="message"></div>
   </div>
 
   <script type="module">
@@ -132,12 +364,38 @@ petit indice <br/>
     const DUREE_MAX_MS = 10 * 60 * 1000; // 10 minutes
     const CLE_SESSION_START = "firebase_session_start";
 
+    const ongletConnexion = document.getElementById("onglet-connexion");
+    const ongletInscription = document.getElementById("onglet-inscription");
     const formConnexion = document.getElementById("form-connexion");
     const formInscription = document.getElementById("form-inscription");
     const messageAcces = document.getElementById("message-acces");
     const contenuProtege = document.getElementById("contenu-protege");
     const zoneAcces = document.getElementById("zone-acces");
     const btnDeconnexion = document.getElementById("btn-deconnexion");
+
+    function afficherMessage(texte, type = "info") {
+      if (!texte) {
+        messageAcces.textContent = "";
+        messageAcces.className = "message";
+        return;
+      }
+      messageAcces.textContent = texte;
+      messageAcces.className = `message visible ${type}`;
+    }
+
+    function basculerOnglet(mode) {
+      const estConnexion = mode === "connexion";
+      ongletConnexion.classList.toggle("actif", estConnexion);
+      ongletInscription.classList.toggle("actif", !estConnexion);
+      ongletConnexion.setAttribute("aria-selected", String(estConnexion));
+      ongletInscription.setAttribute("aria-selected", String(!estConnexion));
+      formConnexion.classList.toggle("masque", !estConnexion);
+      formInscription.classList.toggle("masque", estConnexion);
+      afficherMessage("");
+    }
+
+    ongletConnexion.addEventListener("click", () => basculerOnglet("connexion"));
+    ongletInscription.addEventListener("click", () => basculerOnglet("inscription"));
 
     async function inscrireUtilisateur(email, password) {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -161,13 +419,13 @@ petit indice <br/>
       e.preventDefault();
       const email = document.getElementById("email-connexion").value;
       const password = document.getElementById("password-connexion").value;
-      messageAcces.textContent = "";
+      afficherMessage("");
 
       try {
         await connecterUtilisateur(email, password);
         formConnexion.reset();
       } catch (error) {
-        messageAcces.textContent = "Erreur de connexion : " + error.message;
+        afficherMessage("Erreur de connexion : " + error.message, "erreur");
       }
     });
 
@@ -175,14 +433,14 @@ petit indice <br/>
       e.preventDefault();
       const email = document.getElementById("email-inscription").value;
       const password = document.getElementById("password-inscription").value;
-      messageAcces.textContent = "";
+      afficherMessage("");
 
       try {
         await inscrireUtilisateur(email, password);
-        messageAcces.textContent = "Inscription envoyée ! En attente d'approbation.";
+        afficherMessage("Inscription envoyée ! Votre compte est en attente d'approbation.", "succes");
         formInscription.reset();
       } catch (error) {
-        messageAcces.textContent = "Erreur d'inscription : " + error.message;
+        afficherMessage("Erreur d'inscription : " + error.message, "erreur");
       }
     });
 
@@ -209,7 +467,7 @@ petit indice <br/>
         await signOut(auth);
         contenuProtege.style.display = "none";
         zoneAcces.style.display = "block";
-        messageAcces.textContent = "Session expirée après 10 minutes. Veuillez vous reconnecter.";
+        afficherMessage("Session expirée après 10 minutes. Veuillez vous reconnecter.", "info");
         return;
       }
 
@@ -219,11 +477,11 @@ petit indice <br/>
       if (estApprouve) {
         zoneAcces.style.display = "none";
         contenuProtege.style.display = "block";
-        messageAcces.textContent = "";
+        afficherMessage("");
       } else {
         contenuProtege.style.display = "none";
         zoneAcces.style.display = "block";
-        messageAcces.textContent = "Votre compte est en attente d'approbation.";
+        afficherMessage("Votre compte est en attente d'approbation.", "info");
       }
     }
 
