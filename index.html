@@ -7,6 +7,7 @@
       </head>
 
      <body>
+		 <div id="contenu-protege" style="display: none;">
 	 <h1>boro 700</h1>
 	 <h2>NDDB#7</h2>
     <p>En effet oui, je distribue que des paroles r-halam un enfant maudit je ne fais pas le carême<br/>
@@ -61,6 +62,11 @@ petit indice <br/>
 <p><a href="https://pornhub.fr">regal toi mon chef <-- évite si y'a tes darrons</a></p>
 <p>un petit mot doux d'un auteur très connus<br/>
 <a href="https://i.etsystatic.com/26931066/c/2268/2268/0/0/il/92f06c/3016044841/il_300x300.3016044841_67tk.jpg">imprègne toi de l'auteur avec la citation</a>
+	</div>
+
+<div id="zone-inscription">
+  <h2>Inscription obligatoire</h2>
+[cite: 8]
 	<form id="form-inscription">
   <input type="email" id="email-inscription" placeholder="Adresse e-mail" required />
   <input type="password" id="password-inscription" placeholder="Mot de passe" required />
@@ -71,9 +77,9 @@ petit indice <br/>
 	<script type="module">
 	// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword,onAuthstatChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getdoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -121,5 +127,31 @@ formInscription.addEventListener("submit", async (e) => {
     messageInscription.textContent = "Erreur : " + error.message;
   }
 });	
+		const contenuProtege = document.getElementById("contenu-protege");
+const zoneInscription = document.getElementById("zone-inscription");
+
+async function verifierAcces(user) {
+  if (!user) {
+    contenuProtege.style.display = "none";
+    zoneInscription.style.display = "block";
+    return;
+  }
+
+  const snap = await getDoc(doc(db, "utilisateur", user.uid));
+  const estApprouve = snap.exists() && snap.data().approuve === true;
+
+  if (estApprouve) {
+    zoneInscription.style.display = "none";
+    contenuProtege.style.display = "block";
+  } else {
+    contenuProtege.style.display = "none";
+    zoneInscription.style.display = "block";
+    messageInscription.textContent = "Votre compte est en attente d'approbation.";
+  }
+}
+
+onAuthStateChanged(auth, (user) => {
+  verifierAcces(user);
+});
 	</script>
 </html>
