@@ -61,7 +61,12 @@ petit indice <br/>
 <p><a href="https://pornhub.fr">regal toi mon chef <-- évite si y'a tes darrons</a></p>
 <p>un petit mot doux d'un auteur très connus<br/>
 <a href="https://i.etsystatic.com/26931066/c/2268/2268/0/0/il/92f06c/3016044841/il_300x300.3016044841_67tk.jpg">imprègne toi de l'auteur avec la citation</a>
-	
+	<form id="form-inscription">
+  <input type="email" id="email-inscription" placeholder="Adresse e-mail" required />
+  <input type="password" id="password-inscription" placeholder="Mot de passe" required />
+  <button type="submit">S'inscrire</button>
+</form>
+<p id="message-inscription"></p>
 	</body>
 	<script type="module">
 	// Import the functions you need from the SDKs you need
@@ -100,5 +105,21 @@ async function inscrireUtilisateur(email, password) {
     createdAt: new Date().toISOString()
   });
 }
+	const formInscription = document.getElementById("form-inscription");
+const messageInscription = document.getElementById("message-inscription");
+
+formInscription.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("email-inscription").value;
+  const password = document.getElementById("password-inscription").value;
+
+  try {
+    await inscrireUtilisateur(email, password);
+    messageInscription.textContent = "Inscription envoyée ! En attente d'approbation.";
+    formInscription.reset();
+  } catch (error) {
+    messageInscription.textContent = "Erreur : " + error.message;
+  }
+});	
 	</script>
 </html>
