@@ -203,19 +203,13 @@ Je bois le feu et pas de l’eau, je suis un démon et pas un ange</div>
     </div>
 
     <form id="form-connexion">
-      <div>
-        <label for="email-connexion">Adresse e-mail</label>
-        <input type="email" id="email-connexion" placeholder="nom@exemple.com" autocomplete="email" required />
-      </div>
-      <div>
-        <label for="password-connexion">Mot de passe</label>
+      <div><label for="email-connexion">Adresse e-mail</label>
+        <input type="email" id="email-connexion" placeholder="nom@exemple.com" autocomplete="email" required /></div>
+      <div><label for="password-connexion">Mot de passe</label>
         <div style="position:relative;display:flex;align-items:center;">
-          <input type="password" id="password-connexion" placeholder="••••••••" autocomplete="current-password" required style="width:100%;padding-right:40px;" />
-          <button type="button" class="btn-toggle-mdp" data-target="password-connexion" aria-label="Afficher le mot de passe" style="position:absolute;right:10px;background:none;border:none;color:inherit;cursor:pointer;opacity:0.7;display:flex;align-items:center;padding:4px;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-          </button>
-        </div>
-      </div>
+          <input type="password" id="password-connexion" placeholder="••••••••" autocomplete="current-password" required style="width:100%;padding-right:42px;" />
+          <button type="button" class="btn-toggle-mdp" data-target="password-connexion" aria-label="Afficher le mot de passe" style="position:absolute;right:10px;background:none;border:none;color:inherit;cursor:pointer;font-size:0.85rem;padding:4px;">👁️</button>
+        </div></div>
       <button type="button" id="btn-mdp-oublie" class="btn-lien-oublie" style="background:none;border:none;color:inherit;text-decoration:underline;cursor:pointer;align-self:flex-end;font-size:0.85rem;padding:0;">Mot de passe oublié</button>
       <button type="submit" class="btn">Se connecter</button>
 
@@ -226,10 +220,8 @@ Je bois le feu et pas de l’eau, je suis un démon et pas un ange</div>
         <div>
           <label for="nouveau-mot-de-passe">Nouveau mot de passe</label>
           <div style="position:relative;display:flex;align-items:center;">
-            <input type="password" id="nouveau-mot-de-passe" placeholder="Minimum 6 caractères" autocomplete="new-password" minlength="6" style="width:100%;padding-right:40px;" />
-            <button type="button" class="btn-toggle-mdp" data-target="nouveau-mot-de-passe" aria-label="Afficher le mot de passe" style="position:absolute;right:10px;background:none;border:none;color:inherit;cursor:pointer;opacity:0.7;display:flex;align-items:center;padding:4px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-            </button>
+            <input type="password" id="nouveau-mot-de-passe" placeholder="Minimum 6 caractères" autocomplete="new-password" minlength="6" style="width:100%;padding-right:42px;" />
+            <button type="button" class="btn-toggle-mdp" data-target="nouveau-mot-de-passe" aria-label="Afficher le mot de passe" style="position:absolute;right:10px;background:none;border:none;color:inherit;cursor:pointer;font-size:0.85rem;padding:4px;">👁️</button>
           </div>
         </div>
         <button type="button" id="btn-valider-nouveau-mdp" class="btn">Enregistrer et me connecter</button>
@@ -237,19 +229,13 @@ Je bois le feu et pas de l’eau, je suis un démon et pas un ange</div>
     </form>
 
     <form id="form-inscription" class="masque">
-      <div>
-        <label for="email-inscription">Adresse e-mail</label>
-        <input type="email" id="email-inscription" placeholder="nom@exemple.com" autocomplete="email" required />
-      </div>
-      <div>
-        <label for="password-inscription">Mot de passe</label>
+      <div><label for="email-inscription">Adresse e-mail</label>
+        <input type="email" id="email-inscription" placeholder="nom@exemple.com" autocomplete="email" required /></div>
+      <div><label for="password-inscription">Mot de passe</label>
         <div style="position:relative;display:flex;align-items:center;">
-          <input type="password" id="password-inscription" placeholder="Minimum 6 caractères" autocomplete="new-password" minlength="6" required style="width:100%;padding-right:40px;" />
-          <button type="button" class="btn-toggle-mdp" data-target="password-inscription" aria-label="Afficher le mot de passe" style="position:absolute;right:10px;background:none;border:none;color:inherit;cursor:pointer;opacity:0.7;display:flex;align-items:center;padding:4px;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-          </button>
-        </div>
-      </div>
+          <input type="password" id="password-inscription" placeholder="Minimum 6 caractères" autocomplete="new-password" minlength="6" required style="width:100%;padding-right:42px;" />
+          <button type="button" class="btn-toggle-mdp" data-target="password-inscription" aria-label="Afficher le mot de passe" style="position:absolute;right:10px;background:none;border:none;color:inherit;cursor:pointer;font-size:0.85rem;padding:4px;">👁️</button>
+        </div></div>
       <button type="submit" class="btn">Créer mon compte</button>
     </form>
 
@@ -286,166 +272,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
 const auth = getAuth(app);
-auth.languageCode = "fr";
-const db = getFirestore(app);
-
-const DUREE_MAX_MS = 10 * 60 * 1000;
-const CLE_SESSION_START = "firebase_session_start";
-const $ = (id) => document.getElementById(id);
-
-const ongletConnexion = $("onglet-connexion"), ongletInscription = $("onglet-inscription");
-const formConnexion = $("form-connexion"), formInscription = $("form-inscription");
-const btnMdpOublie = $("btn-mdp-oublie"), blocResetMdp = $("bloc-reset-mdp"), btnValiderNouveauMdp = $("btn-valider-nouveau-mdp");
-const messageAcces = $("message-acces"), contenuProtege = $("contenu-protege"), zoneAcces = $("zone-acces");
-
-let chrono = null, observateur = null, titreFait = false, emailPourReinit = "";
-
-/* ---------- Afficher / Masquer le mot de passe ---------- */
-const ICONE_OEIL_OUVERT = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
-const ICONE_OEIL_BARRE = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
-
-document.querySelectorAll(".btn-toggle-mdp").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const input = $(btn.dataset.target);
-    const estMasque = input.type === "password";
-    input.type = estMasque ? "text" : "password";
-    btn.innerHTML = estMasque ? ICONE_OEIL_BARRE : ICONE_OEIL_OUVERT;
-    btn.setAttribute("aria-label", estMasque ? "Masquer le mot de passe" : "Afficher le mot de passe");
-  });
-});
-
-function reinitialiserChampsMdp() {
-  document.querySelectorAll(".btn-toggle-mdp").forEach((btn) => {
-    const input = $(btn.dataset.target);
-    input.type = "password";
-    btn.innerHTML = ICONE_OEIL_OUVERT;
-    btn.setAttribute("aria-label", "Afficher le mot de passe");
-  });
-}
-
-function afficherMessage(texte, type = "info") {
-  messageAcces.textContent = texte || "";
-  messageAcces.className = texte ? `message visible ${type}` : "message";
-}
-
-function basculerOnglet(mode) {
-  const c = mode === "connexion";
-  ongletConnexion.classList.toggle("actif", c);
-  ongletInscription.classList.toggle("actif", !c);
-  ongletConnexion.setAttribute("aria-selected", String(c));
-  ongletInscription.setAttribute("aria-selected", String(!c));
-  formConnexion.classList.toggle("masque", !c);
-  formInscription.classList.toggle("masque", c);
-  reinitialiserChampsMdp();
-  afficherMessage("");
-}
-ongletConnexion.addEventListener("click", () => basculerOnglet("connexion"));
-ongletInscription.addEventListener("click", () => basculerOnglet("inscription"));
-
-function messageErreur(e) {
-  const m = {
-    "auth/invalid-credential": "E-mail ou mot de passe incorrect.",
-    "auth/email-already-in-use": "Cette adresse e-mail a déjà un compte.",
-    "auth/weak-password": "Mot de passe trop court (6 caractères minimum).",
-    "auth/invalid-email": "Adresse e-mail invalide.",
-    "auth/user-not-found": "Aucun compte trouvé avec cette adresse e-mail.",
-    "auth/too-many-requests": "Trop de tentatives. Réessaie dans quelques minutes.",
-    "auth/unauthorized-continue-uri": "Domaine non autorisé dans Firebase (ajoute ton domaine GitHub Pages dans Authentication > Settings > Authorized domains)."
-  };
-  return m[e.code] || e.message;
-}
-
-/* ---------- Mot de passe oublié ---------- */
-btnMdpOublie.addEventListener("click", async () => {
-  const emailInput = $("email-connexion");
-  const email = emailInput.value.trim();
-  if (!email) {
-    afficherMessage("Entre d'abord ton adresse e-mail dans le champ ci-dessus.", "erreur");
-    emailInput.focus();
-    return;
-  }
-  btnMdpOublie.disabled = true;
-  afficherMessage("Envoi de l'e-mail en cours...", "info");
-  try {
-    await sendPasswordResetEmail(auth, email, {
-      url: window.location.origin + window.location.pathname
-    });
-    emailPourReinit = email;
-    blocResetMdp.classList.remove("masque");
-    afficherMessage(`E-mail de réinitialisation envoyé à ${email} (vérifie aussi tes spams). Clique sur le lien reçu pour choisir ton mot de passe, puis entre ton nouveau mot de passe ci-dessous.`, "succes");
-  } catch (err) {
-    afficherMessage(messageErreur(err), "erreur");
-  } finally {
-    btnMdpOublie.disabled = false;
-  }
-});
-
-btnValiderNouveauMdp.addEventListener("click", async () => {
-  const email = $("email-connexion").value.trim() || emailPourReinit;
-  const nouveauMdp = $("nouveau-mot-de-passe").value;
-  if (!email) {
-    afficherMessage("Adresse e-mail manquante.", "erreur");
-    return;
-  }
-  if (!nouveauMdp || nouveauMdp.length < 6) {
-    afficherMessage("Entre ton nouveau mot de passe (6 caractères minimum).", "erreur");
-    return;
-  }
-  afficherMessage("");
-  try {
-    await signInWithEmailAndPassword(auth, email, nouveauMdp);
-    sessionStorage.setItem(CLE_SESSION_START, String(Date.now()));
-    $("nouveau-mot-de-passe").value = "";
-    blocResetMdp.classList.add("masque");
-    formConnexion.reset();
-    reinitialiserChampsMdp();
-  } catch (err) {
-    afficherMessage("Connexion impossible : vérifie que tu as bien cliqué sur le lien dans ton e-mail avant de valider (" + messageErreur(err) + ")", "erreur");
-  }
-});
-
-/* ---------- Connexion ---------- */
-formConnexion.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  afficherMessage("");
-  try {
-    await signInWithEmailAndPassword(auth, $("email-connexion").value.trim(), $("password-connexion").value);
-    sessionStorage.setItem(CLE_SESSION_START, String(Date.now()));
-    formConnexion.reset();
-    reinitialiserChampsMdp();
-    blocResetMdp.classList.add("masque");
-  } catch (err) { afficherMessage(messageErreur(err), "erreur"); }
-});
-
-/* ---------- Inscription + envoi e-mail de vérification ---------- */
-formInscription.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  afficherMessage("Création du compte et envoi de l'e-mail...", "info");
-  try {
-    const cred = await createUserWithEmailAndPassword(auth, $("email-inscription").value.trim(), $("password-inscription").value);
-    await setDoc(doc(db, "utilisateur", cred.user.uid), {
-      email: cred.user.email,
-      approuve: false,
-      createdAt: new Date().toISOString()
-    });
-    await sendEmailVerification(cred.user, {
-      url: window.location.origin + window.location.pathname
-    });
-    sessionStorage.setItem(CLE_SESSION_START, String(Date.now()));
-    afficherMessage(`Compte créé ! Un e-mail de vérification a été envoyé à ${cred.user.email} (vérifie tes spams). Ton compte est en attente d'approbation.`, "succes");
-    formInscription.reset();
-    reinitialiserChampsMdp();
-  } catch (err) { afficherMessage(messageErreur(err), "erreur"); }
-});
-
-$("btn-deconnexion").addEventListener("click", async () => {
-  sessionStorage.removeItem(CLE_SESSION_START);
-  await signOut(auth);
-});
-
-/* ---------- Animations ---------- */
-function construireTitre() {
-  if (titreFait) return;
-  titreFait = true;
-  let i = 0;
-  $("titre").innerHTML = "BORO 700".
+auth
