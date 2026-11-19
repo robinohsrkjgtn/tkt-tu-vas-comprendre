@@ -31,30 +31,7 @@ T’façon je verra tôt ou tard<br/>
 Je bois le feu et pas de l’eau, je suis un démon et pas un ange <br/></p>
 	 
      <img src= "photo.jpg" class=image-speciale />
-	
-	</body>
-	// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBJcE_8aKY46NK4l2NgSHLaQcXXgrAQTzo",
-  authDomain: "site-fisha.firebaseapp.com",
-  projectId: "site-fisha",
-  storageBucket: "site-fisha.firebasestorage.app",
-  messagingSenderId: "678515095228",
-  appId: "1:678515095228:web:de48bec38f15354f7d42b9",
-  measurementId: "G-YRQCZ83JYX"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-</html>
+		 </html>
 <h2> BIOGRAPHIE </h2>
 	<ul><li> 11 septembre 2001</li> 
 	<li>1939/1945</li>
@@ -84,3 +61,44 @@ petit indice <br/>
 <p><a href="https://pornhub.fr">regal toi mon chef <-- évite si y'a tes darrons</a></p>
 <p>un petit mot doux d'un auteur très connus<br/>
 <a href="https://i.etsystatic.com/26931066/c/2268/2268/0/0/il/92f06c/3016044841/il_300x300.3016044841_67tk.jpg">imprègne toi de l'auteur avec la citation</a>
+	
+	</body>
+	<script type="module"
+	// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBJcE_8aKY46NK4l2NgSHLaQcXXgrAQTzo",
+  authDomain: "site-fisha.firebaseapp.com",
+  projectId: "site-fisha",
+  storageBucket: "site-fisha.firebasestorage.app",
+  messagingSenderId: "678515095228",
+  appId: "1:678515095228:web:de48bec38f15354f7d42b9",
+  measurementId: "G-YRQCZ83JYX"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+	const auth = getAuth(app);
+const db = getFirestore(app);
+
+async function inscrireUtilisateur(email, password) {
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  const user = userCredential.user;
+
+  await setDoc(doc(db, "utilisateur", user.uid), {
+    email: user.email,
+    approuve: false,
+    createdAt: new Date().toISOString()
+  });
+}
+	</script>
+</html>
