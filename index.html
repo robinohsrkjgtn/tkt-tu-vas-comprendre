@@ -79,15 +79,25 @@ petit indice <br/>
     <button type="button" id="btn-deconnexion">Se déconnecter</button>
   </div>
 
-  <!-- Zone d'inscription affichée par défaut -->
-  <div id="zone-inscription">
-    <h2>Inscription obligatoire</h2>
+  <!-- Zone de connexion et d'inscription affichée si déconnecté -->
+  <div id="zone-acces">
+    <h2>Connexion (compte déjà existant)</h2>
+    <form id="form-connexion">
+      <input type="email" id="email-connexion" placeholder="Adresse e-mail" required />
+      <input type="password" id="password-connexion" placeholder="Mot de passe" required />
+      <button type="submit">Se connecter</button>
+    </form>
+
+    <hr />
+
+    <h2>Inscription (nouveau compte)</h2>
     <form id="form-inscription">
       <input type="email" id="email-inscription" placeholder="Adresse e-mail" required />
       <input type="password" id="password-inscription" placeholder="Mot de passe" required />
       <button type="submit">S'inscrire</button>
     </form>
-    <p id="message-inscription"></p>
+
+    <p id="message-acces"></p>
   </div>
 
   <script type="module">
@@ -95,6 +105,7 @@ petit indice <br/>
     import {
       getAuth,
       createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
       onAuthStateChanged,
       setPersistence,
       browserSessionPersistence,
@@ -121,10 +132,11 @@ petit indice <br/>
     const DUREE_MAX_MS = 10 * 60 * 1000; // 10 minutes
     const CLE_SESSION_START = "firebase_session_start";
 
+    const formConnexion = document.getElementById("form-connexion");
     const formInscription = document.getElementById("form-inscription");
-    const messageInscription = document.getElementById("message-inscription");
+    const messageAcces = document.getElementById("message-acces");
     const contenuProtege = document.getElementById("contenu-protege");
-    const zoneInscription = document.getElementById("zone-inscription");
+    const zoneAcces = document.getElementById("zone-acces");
     const btnDeconnexion = document.getElementById("btn-deconnexion");
 
     async function inscrireUtilisateur(email, password) {
@@ -140,17 +152,37 @@ petit indice <br/>
       sessionStorage.setItem(CLE_SESSION_START, String(Date.now()));
     }
 
+    async function connecterUtilisateur(email, password) {
+      await signInWithEmailAndPassword(auth, email, password);
+      sessionStorage.setItem(CLE_SESSION_START, String(Date.now()));
+    }
+
+    formConnexion.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email-connexion").value;
+      const password = document.getElementById("password-connexion").value;
+      messageAcces.textContent = "";
+
+      try {
+        await connecterUtilisateur(email, password);
+        formConnexion.reset();
+      } catch (error) {
+        messageAcces.textContent = "Erreur de connexion : " + error.message;
+      }
+    });
+
     formInscription.addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("email-inscription").value;
       const password = document.getElementById("password-inscription").value;
+      messageAcces.textContent = "";
 
       try {
         await inscrireUtilisateur(email, password);
-        messageInscription.textContent = "Inscription envoyée ! En attente d'approbation.";
+        messageAcces.textContent = "Inscription envoyée ! En attente d'approbation.";
         formInscription.reset();
       } catch (error) {
-        messageInscription.textContent = "Erreur : " + error.message;
+        messageAcces.textContent = "Erreur d'inscription : " + error.message;
       }
     });
 
@@ -163,7 +195,7 @@ petit indice <br/>
       if (!user) {
         sessionStorage.removeItem(CLE_SESSION_START);
         contenuProtege.style.display = "none";
-        zoneInscription.style.display = "block";
+        zoneAcces.style.display = "block";
         return;
       }
 
@@ -176,8 +208,8 @@ petit indice <br/>
         sessionStorage.removeItem(CLE_SESSION_START);
         await signOut(auth);
         contenuProtege.style.display = "none";
-        zoneInscription.style.display = "block";
-        messageInscription.textContent = "Session expirée après 10 minutes. Veuillez vous reconnecter.";
+        zoneAcces.style.display = "block";
+        messageAcces.textContent = "Session expirée après 10 minutes. Veuillez vous reconnecter.";
         return;
       }
 
@@ -185,13 +217,13 @@ petit indice <br/>
       const estApprouve = snap.exists() && snap.data().approuve === true;
 
       if (estApprouve) {
-        zoneInscription.style.display = "none";
+        zoneAcces.style.display = "none";
         contenuProtege.style.display = "block";
-        messageInscription.textContent = "";
+        messageAcces.textContent = "";
       } else {
         contenuProtege.style.display = "none";
-        zoneInscription.style.display = "block";
-        messageInscription.textContent = "Votre compte est en attente d'approbation.";
+        zoneAcces.style.display = "block";
+        messageAcces.textContent = "Votre compte est en attente d'approbation.";
       }
     }
 
