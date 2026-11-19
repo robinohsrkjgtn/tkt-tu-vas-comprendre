@@ -63,94 +63,127 @@ petit indice <br/>
 <p>un petit mot doux d'un auteur très connus<br/>
 <a href="https://i.etsystatic.com/26931066/c/2268/2268/0/0/il/92f06c/3016044841/il_300x300.3016044841_67tk.jpg">imprègne toi de l'auteur avec la citation</a>
 	</div>
-<div id="zone-inscription">
-  <h2>Inscription obligatoire</h2>
-  <form id="form-inscription">
-    <input type="email" id="email-inscription" placeholder="Adresse e-mail" required />
-    <input type="password" id="password-inscription" placeholder="Mot de passe" required />
-    <button type="submit">S'inscrire</button>
-  </form>
-  <p id="message-inscription"></p>
-</div>
-</body>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+		 <!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accès protégé</title>
+</head>
+<body>
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyBJcE_8aKY46NK4l2NgSHLaQcXXgrAQTzo",
-    authDomain: "site-fisha.firebaseapp.com",
-    projectId: "site-fisha",
-    storageBucket: "site-fisha.firebasestorage.app",
-    messagingSenderId: "678515095228",
-    appId: "1:678515095228:web:de48bec38f15354f7d42b9",
-    measurementId: "G-YRQCZ83JYX"
-  };
+  <!-- Contenu visible uniquement si connecté ET approuvé -->
+  <div id="contenu-protege" style="display: none;">
+    <h2>Bienvenue sur l'espace protégé</h2>
+    <p>Votre compte est validé.</p>
+    <button type="button" id="btn-deconnexion">Se déconnecter</button>
+  </div>
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+  <!-- Zone d'inscription / connexion affichée par défaut -->
+  <div id="zone-inscription">
+    <h2>Inscription obligatoire</h2>
+    <form id="form-inscription">
+      <input type="email" id="email-inscription" placeholder="Adresse e-mail" required />
+      <input type="password" id="password-inscription" placeholder="Mot de passe" required />
+      <button type="submit">S'inscrire</button>
+    </form>
+    <p id="message-inscription"></p>
+  </div>
 
-  async function inscrireUtilisateur(email, password) {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      onAuthStateChanged,
+      setPersistence,
+      browserSessionPersistence,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    await setDoc(doc(db, "utilisateur", user.uid), {
-      email: user.email,
-      approuve: false,
-      createdAt: new Date().toISOString()
+    const firebaseConfig = {
+      apiKey: "AIzaSyBJcE_8aKY46NK4l2NgSHLaQcXXgrAQTzo",
+      authDomain: "site-fisha.firebaseapp.com",
+      projectId: "site-fisha",
+      storageBucket: "site-fisha.firebasestorage.app",
+      messagingSenderId: "678515095228",
+      appId: "1:678515095228:web:de48bec38f15354f7d42b9",
+      measurementId: "G-YRQCZ83JYX"
+    };
+
+    // Initialisation Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // La session est conservée uniquement pendant la session de l'onglet/navigateur
+    setPersistence(auth, browserSessionPersistence).catch((error) => {
+      console.error("Erreur de persistance :", error);
     });
-  }
 
-  const formInscription = document.getElementById("form-inscription");
-  const messageInscription = document.getElementById("message-inscription");
+    const formInscription = document.getElementById("form-inscription");
+    const messageInscription = document.getElementById("message-inscription");
+    const contenuProtege = document.getElementById("contenu-protege");
+    const zoneInscription = document.getElementById("zone-inscription");
+    const btnDeconnexion = document.getElementById("btn-deconnexion");
 
-  formInscription.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const email = document.getElementById("email-inscription").value;
-    const password = document.getElementById("password-inscription").value;
+    async function inscrireUtilisateur(email, password) {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-    try {
-      await inscrireUtilisateur(email, password);
-      messageInscription.textContent = "Inscription envoyée ! En attente d'approbation.";
-      formInscription.reset();
-    } catch (error) {
-      messageInscription.textContent = "Erreur : " + error.message;
-    }
-  });
-
-  const contenuProtege = document.getElementById("contenu-protege");
-  const zoneInscription = document.getElementById("zone-inscription");
-
-  async function verifierAcces(user) {
-    if (!user) {
-      contenuProtege.style.display = "none";
-      zoneInscription.style.display = "block";
-      return;
+      await setDoc(doc(db, "utilisateur", user.uid), {
+        email: user.email,
+        approuve: false,
+        createdAt: new Date().toISOString()
+      });
     }
 
-    const snap = await getDoc(doc(db, "utilisateur", user.uid));
-    const estApprouve = snap.exists() && snap.data().approuve === true;
+    formInscription.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email-inscription").value;
+      const password = document.getElementById("password-inscription").value;
 
-    if (estApprouve) {
-      zoneInscription.style.display = "none";
-      contenuProtege.style.display = "block";
-    } else {
-      contenuProtege.style.display = "none";
-      zoneInscription.style.display = "block";
-      messageInscription.textContent = "Votre compte est en attente d'approbation.";
+      try {
+        await inscrireUtilisateur(email, password);
+        messageInscription.textContent = "Inscription envoyée ! En attente d'approbation.";
+        formInscription.reset();
+      } catch (error) {
+        messageInscription.textContent = "Erreur : " + error.message;
+      }
+    });
+
+    btnDeconnexion.addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    async function verifierAcces(user) {
+      if (!user) {
+        contenuProtege.style.display = "none";
+        zoneInscription.style.display = "block";
+        return;
+      }
+
+      const snap = await getDoc(doc(db, "utilisateur", user.uid));
+      const estApprouve = snap.exists() && snap.data().approuve === true;
+
+      if (estApprouve) {
+        zoneInscription.style.display = "none";
+        contenuProtege.style.display = "block";
+        messageInscription.textContent = "";
+      } else {
+        contenuProtege.style.display = "none";
+        zoneInscription.style.display = "block";
+        messageInscription.textContent = "Votre compte est en attente d'approbation.";
+      }
     }
-  }
 
-  onAuthStateChanged(auth, (user) => {
-    verifierAcces(user);
-  });
-</script>
+    onAuthStateChanged(auth, (user) => {
+      verifierAcces(user);
+    });
+  </script>
+</body>
 </html>
 
