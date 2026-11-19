@@ -63,24 +63,12 @@ petit indice <br/>
 <p>un petit mot doux d'un auteur très connus<br/>
 <a href="https://i.etsystatic.com/26931066/c/2268/2268/0/0/il/92f06c/3016044841/il_300x300.3016044841_67tk.jpg">imprègne toi de l'auteur avec la citation</a>
 	</div>
-		 <!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Accès protégé</title>
-</head>
-<body>
-
-  <!-- Contenu visible uniquement si connecté ET approuvé -->
-  <div id="contenu-protege" style="display: none;">
+	<div id="contenu-protege" style="display: none;">
     <h2>Bienvenue sur l'espace protégé</h2>
     <p>Votre compte est validé.</p>
     <button type="button" id="btn-deconnexion">Se déconnecter</button>
   </div>
-
-  <!-- Zone d'inscription / connexion affichée par défaut -->
-  <div id="zone-inscription">
+<div id="zone-inscription">
     <h2>Inscription obligatoire</h2>
     <form id="form-inscription">
       <input type="email" id="email-inscription" placeholder="Adresse e-mail" required />
@@ -119,10 +107,13 @@ petit indice <br/>
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // La session est conservée uniquement pendant la session de l'onglet/navigateur
+    // Session conservée uniquement pendant la session de l'onglet/navigateur
     setPersistence(auth, browserSessionPersistence).catch((error) => {
       console.error("Erreur de persistance :", error);
     });
+
+    const DUREE_MAX_MS = 10 * 60 * 1000; // 10 minutes
+    const CLE_SESSION_START = "firebase_session_start";
 
     const formInscription = document.getElementById("form-inscription");
     const messageInscription = document.getElementById("message-inscription");
@@ -139,6 +130,8 @@ petit indice <br/>
         approuve: false,
         createdAt: new Date().toISOString()
       });
+
+      sessionStorage.setItem(CLE_SESSION_START, String(Date.now()));
     }
 
     formInscription.addEventListener("submit", async (e) => {
@@ -156,13 +149,29 @@ petit indice <br/>
     });
 
     btnDeconnexion.addEventListener("click", async () => {
+      sessionStorage.removeItem(CLE_SESSION_START);
       await signOut(auth);
     });
 
     async function verifierAcces(user) {
       if (!user) {
+        sessionStorage.removeItem(CLE_SESSION_START);
         contenuProtege.style.display = "none";
         zoneInscription.style.display = "block";
+        return;
+      }
+
+      const maintenant = Date.now();
+      const debutSession = Number(sessionStorage.getItem(CLE_SESSION_START));
+
+      if (!debutSession) {
+        sessionStorage.setItem(CLE_SESSION_START, String(maintenant));
+      } else if (maintenant - debutSession > DUREE_MAX_MS) {
+        sessionStorage.removeItem(CLE_SESSION_START);
+        await signOut(auth);
+        contenuProtege.style.display = "none";
+        zoneInscription.style.display = "block";
+        messageInscription.textContent = "Session expirée après 10 minutes. Veuillez vous reconnecter.";
         return;
       }
 
@@ -186,4 +195,3 @@ petit indice <br/>
   </script>
 </body>
 </html>
-
