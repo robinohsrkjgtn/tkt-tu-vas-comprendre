@@ -33,6 +33,27 @@ Je bois le feu et pas de l’eau, je suis un démon et pas un ange <br/></p>
      <img src= "photo.jpg" class=image-speciale />
 	
 	</body>
+	// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBJcE_8aKY46NK4l2NgSHLaQcXXgrAQTzo",
+  authDomain: "site-fisha.firebaseapp.com",
+  projectId: "site-fisha",
+  storageBucket: "site-fisha.firebasestorage.app",
+  messagingSenderId: "678515095228",
+  appId: "1:678515095228:web:de48bec38f15354f7d42b9",
+  measurementId: "G-YRQCZ83JYX"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 </html>
 <h2> BIOGRAPHIE </h2>
 	<ul><li> 11 septembre 2001</li> 
