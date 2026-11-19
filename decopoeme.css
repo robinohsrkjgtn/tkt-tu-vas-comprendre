@@ -49,3 +49,195 @@ h2
     background-color : #FFFD00 ;/* A compléter pour avoir du jaune	*/
     color : #008000 ;/* A compléter pour avoir du vert	*/
 }
+
+  /* Variables d'authentification (à fusionner dans votre :root si vous en avez déjà un) */
+:root {
+  --auth-bg: #f1f5f9;
+  --auth-card: #ffffff;
+  --auth-text: #0f172a;
+  --auth-muted: #64748b;
+  --auth-border: #e2e8f0;
+  --auth-primary: #2563eb;
+  --auth-primary-hover: #1d4ed8;
+  --auth-danger-bg: #fef2f2;
+  --auth-danger-text: #b91c1c;
+  --auth-success-bg: #f0fdf4;
+  --auth-success-text: #15803d;
+}
+
+.carte {
+  width: 100%;
+  max-width: 420px;
+  margin: 32px auto;
+  background: var(--auth-card);
+  border: 1px solid var(--auth-border);
+  border-radius: 16px;
+  padding: 32px 28px;
+  box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.12);
+  color: var(--auth-text);
+}
+
+.entete {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.entete h2 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.entete p {
+  font-size: 0.92rem;
+  color: var(--auth-muted);
+  margin: 0;
+}
+
+.onglets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--auth-bg);
+  padding: 4px;
+  border-radius: 10px;
+  margin-bottom: 22px;
+  gap: 4px;
+}
+
+.onglet {
+  border: none;
+  background: transparent;
+  padding: 9px 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--auth-muted);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.onglet.actif {
+  background: var(--auth-card);
+  color: var(--auth-text);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+}
+
+.carte form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.champ label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.champ input {
+  width: 100%;
+  padding: 11px 13px;
+  font-size: 0.95rem;
+  border: 1px solid var(--auth-border);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background: #f8fafc;
+  box-sizing: border-box;
+}
+
+.champ input:focus {
+  background: var(--auth-card);
+  border-color: var(--auth-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.carte button[type="submit"],
+.btn-secondaire {
+  margin-top: 4px;
+  width: 100%;
+  padding: 11px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.05s ease;
+}
+
+.carte button[type="submit"] {
+  background: var(--auth-primary);
+  color: #ffffff;
+}
+
+.carte button[type="submit"]:hover {
+  background: var(--auth-primary-hover);
+}
+
+.carte button:active {
+  transform: scale(0.99);
+}
+
+.btn-secondaire {
+  background: var(--auth-bg);
+  color: var(--auth-text);
+  border: 1px solid var(--auth-border);
+  margin-top: 16px;
+}
+
+.btn-secondaire:hover {
+  background: #e2e8f0;
+}
+
+.message {
+  margin-top: 16px;
+  padding: 11px 13px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  display: none;
+}
+
+.message.visible {
+  display: block;
+}
+
+.message.info {
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+.message.succes {
+  background: var(--auth-success-bg);
+  color: var(--auth-success-text);
+  border: 1px solid #bbf7d0;
+}
+
+.message.erreur {
+  background: var(--auth-danger-bg);
+  color: var(--auth-danger-text);
+  border: 1px solid #fecaca;
+}
+
+.badge-valide {
+  display: inline-block;
+  background: var(--auth-success-bg);
+  color: var(--auth-success-text);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+.masque {
+  display: none;
+}
