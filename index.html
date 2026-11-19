@@ -236,7 +236,7 @@ Je bois le feu et pas de l’eau, je suis un démon et pas un ange</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification, onAuthStateChanged, setPersistence, browserSessionPersistence, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, setPersistence, browserSessionPersistence, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -309,7 +309,7 @@ btnMdpOublie.addEventListener("click", async () => {
     await sendPasswordResetEmail(auth, email);
     emailPourReinit = email;
     blocResetMdp.classList.remove("masque");
-    afficherMessage(`E-mail de réinitialisation envoyé à ${email} (pense à vérifier tes spams). Clique sur le lien reçu pour choisir ton mot de passe, puis entre ton nouveau mot de passe ci-dessous.`, "succes");
+    afficherMessage(`E-mail envoyé à ${email}. Clique sur le lien reçu dans ta boîte mail, puis saisis ton nouveau mot de passe ci-dessous.`, "succes");
   } catch (err) {
     afficherMessage(messageErreur(err), "erreur");
   }
@@ -357,9 +357,8 @@ formInscription.addEventListener("submit", async (e) => {
     await setDoc(doc(db, "utilisateur", cred.user.uid), {
       email: cred.user.email, approuve: false, createdAt: new Date().toISOString()
     });
-    await sendEmailVerification(cred.user);
     sessionStorage.setItem(CLE_SESSION_START, String(Date.now()));
-    afficherMessage("Inscription envoyée ! Un e-mail de vérification t'a été envoyé (pense à vérifier tes spams). Ton compte est en attente d'approbation.", "succes");
+    afficherMessage("Inscription envoyée ! Ton compte est en attente d'approbation.", "succes");
     formInscription.reset();
   } catch (err) { afficherMessage(messageErreur(err), "erreur"); }
 });
@@ -450,3 +449,17 @@ async function verifierAcces(user) {
     } else {
       montrerAcces();
       afficherMessage("Ton compte est en attente d'approbation.", "info");
+    }
+  } catch (err) {
+    montrerAcces();
+    afficherMessage("Impossible de vérifier ton compte. Réessaie.", "erreur");
+  }
+}
+
+try { await setPersistence(auth, browserSessionPersistence); }
+catch (err) { console.error("Erreur de persistance :", err); }
+
+onAuthStateChanged(auth, verifierAcces);
+</script>
+</body>
+</html>
