@@ -187,7 +187,6 @@ Je bois le feu et pas de l’eau, je suis un démon et pas un ange</div>
       </div>
       <img class="portrait" src="babo.jpg" alt="Petit indice" onerror="this.remove()" />
     </section>
-
 <footer>BORO 700 · fiche privée</footer>
   </main>
 </div>
@@ -204,10 +203,19 @@ Je bois le feu et pas de l’eau, je suis un démon et pas un ange</div>
     </div>
 
     <form id="form-connexion">
-      <div><label for="email-connexion">Adresse e-mail</label>
-        <input type="email" id="email-connexion" placeholder="nom@exemple.com" autocomplete="email" required /></div>
-      <div><label for="password-connexion">Mot de passe</label>
-        <input type="password" id="password-connexion" placeholder="••••••••" autocomplete="current-password" required /></div>
+      <div>
+        <label for="email-connexion">Adresse e-mail</label>
+        <input type="email" id="email-connexion" placeholder="nom@exemple.com" autocomplete="email" required />
+      </div>
+      <div>
+        <label for="password-connexion">Mot de passe</label>
+        <div style="position:relative;display:flex;align-items:center;">
+          <input type="password" id="password-connexion" placeholder="••••••••" autocomplete="current-password" required style="width:100%;padding-right:40px;" />
+          <button type="button" class="btn-toggle-mdp" data-target="password-connexion" aria-label="Afficher le mot de passe" style="position:absolute;right:10px;background:none;border:none;color:inherit;cursor:pointer;opacity:0.7;display:flex;align-items:center;padding:4px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        </div>
+      </div>
       <button type="button" id="btn-mdp-oublie" class="btn-lien-oublie" style="background:none;border:none;color:inherit;text-decoration:underline;cursor:pointer;align-self:flex-end;font-size:0.85rem;padding:0;">Mot de passe oublié</button>
       <button type="submit" class="btn">Se connecter</button>
 
@@ -217,17 +225,31 @@ Je bois le feu et pas de l’eau, je suis un démon et pas un ange</div>
         </p>
         <div>
           <label for="nouveau-mot-de-passe">Nouveau mot de passe</label>
-          <input type="password" id="nouveau-mot-de-passe" placeholder="Minimum 6 caractères" autocomplete="new-password" minlength="6" />
+          <div style="position:relative;display:flex;align-items:center;">
+            <input type="password" id="nouveau-mot-de-passe" placeholder="Minimum 6 caractères" autocomplete="new-password" minlength="6" style="width:100%;padding-right:40px;" />
+            <button type="button" class="btn-toggle-mdp" data-target="nouveau-mot-de-passe" aria-label="Afficher le mot de passe" style="position:absolute;right:10px;background:none;border:none;color:inherit;cursor:pointer;opacity:0.7;display:flex;align-items:center;padding:4px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
         </div>
         <button type="button" id="btn-valider-nouveau-mdp" class="btn">Enregistrer et me connecter</button>
       </div>
     </form>
 
     <form id="form-inscription" class="masque">
-      <div><label for="email-inscription">Adresse e-mail</label>
-        <input type="email" id="email-inscription" placeholder="nom@exemple.com" autocomplete="email" required /></div>
-      <div><label for="password-inscription">Mot de passe</label>
-        <input type="password" id="password-inscription" placeholder="Minimum 6 caractères" autocomplete="new-password" minlength="6" required /></div>
+      <div>
+        <label for="email-inscription">Adresse e-mail</label>
+        <input type="email" id="email-inscription" placeholder="nom@exemple.com" autocomplete="email" required />
+      </div>
+      <div>
+        <label for="password-inscription">Mot de passe</label>
+        <div style="position:relative;display:flex;align-items:center;">
+          <input type="password" id="password-inscription" placeholder="Minimum 6 caractères" autocomplete="new-password" minlength="6" required style="width:100%;padding-right:40px;" />
+          <button type="button" class="btn-toggle-mdp" data-target="password-inscription" aria-label="Afficher le mot de passe" style="position:absolute;right:10px;background:none;border:none;color:inherit;cursor:pointer;opacity:0.7;display:flex;align-items:center;padding:4px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        </div>
+      </div>
       <button type="submit" class="btn">Créer mon compte</button>
     </form>
 
@@ -278,6 +300,29 @@ const messageAcces = $("message-acces"), contenuProtege = $("contenu-protege"), 
 
 let chrono = null, observateur = null, titreFait = false, emailPourReinit = "";
 
+/* ---------- Afficher / Masquer le mot de passe ---------- */
+const ICONE_OEIL_OUVERT = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+const ICONE_OEIL_BARRE = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+
+document.querySelectorAll(".btn-toggle-mdp").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const input = $(btn.dataset.target);
+    const estMasque = input.type === "password";
+    input.type = estMasque ? "text" : "password";
+    btn.innerHTML = estMasque ? ICONE_OEIL_BARRE : ICONE_OEIL_OUVERT;
+    btn.setAttribute("aria-label", estMasque ? "Masquer le mot de passe" : "Afficher le mot de passe");
+  });
+});
+
+function reinitialiserChampsMdp() {
+  document.querySelectorAll(".btn-toggle-mdp").forEach((btn) => {
+    const input = $(btn.dataset.target);
+    input.type = "password";
+    btn.innerHTML = ICONE_OEIL_OUVERT;
+    btn.setAttribute("aria-label", "Afficher le mot de passe");
+  });
+}
+
 function afficherMessage(texte, type = "info") {
   messageAcces.textContent = texte || "";
   messageAcces.className = texte ? `message visible ${type}` : "message";
@@ -291,6 +336,7 @@ function basculerOnglet(mode) {
   ongletInscription.setAttribute("aria-selected", String(!c));
   formConnexion.classList.toggle("masque", !c);
   formInscription.classList.toggle("masque", c);
+  reinitialiserChampsMdp();
   afficherMessage("");
 }
 ongletConnexion.addEventListener("click", () => basculerOnglet("connexion"));
@@ -352,6 +398,7 @@ btnValiderNouveauMdp.addEventListener("click", async () => {
     $("nouveau-mot-de-passe").value = "";
     blocResetMdp.classList.add("masque");
     formConnexion.reset();
+    reinitialiserChampsMdp();
   } catch (err) {
     afficherMessage("Connexion impossible : vérifie que tu as bien cliqué sur le lien dans ton e-mail avant de valider (" + messageErreur(err) + ")", "erreur");
   }
@@ -365,6 +412,7 @@ formConnexion.addEventListener("submit", async (e) => {
     await signInWithEmailAndPassword(auth, $("email-connexion").value.trim(), $("password-connexion").value);
     sessionStorage.setItem(CLE_SESSION_START, String(Date.now()));
     formConnexion.reset();
+    reinitialiserChampsMdp();
     blocResetMdp.classList.add("masque");
   } catch (err) { afficherMessage(messageErreur(err), "erreur"); }
 });
@@ -386,6 +434,7 @@ formInscription.addEventListener("submit", async (e) => {
     sessionStorage.setItem(CLE_SESSION_START, String(Date.now()));
     afficherMessage(`Compte créé ! Un e-mail de vérification a été envoyé à ${cred.user.email} (vérifie tes spams). Ton compte est en attente d'approbation.`, "succes");
     formInscription.reset();
+    reinitialiserChampsMdp();
   } catch (err) { afficherMessage(messageErreur(err), "erreur"); }
 });
 
@@ -399,93 +448,4 @@ function construireTitre() {
   if (titreFait) return;
   titreFait = true;
   let i = 0;
-  $("titre").innerHTML = "BORO 700".split(" ").map((mot) =>
-    `<span class="mot" aria-hidden="true">${[...mot].map((l) => `<span style="--i:${i++}">${l}</span>`).join("")}</span>`
-  ).join("");
-}
-
-function lancerAnimations() {
-  construireTitre();
-  contenuProtege.classList.remove("go");
-  void contenuProtege.offsetWidth;
-  contenuProtege.classList.add("go");
-
-  const box = $("texte-paroles");
-  if (!box.dataset.pret) {
-    box.dataset.pret = "1";
-    box.innerHTML = box.innerHTML.split(/<br\s*\/?>/i).map((l) => `<span class="v">${l.trim()}</span>`).join("");
-    observateur = new IntersectionObserver((entrees) => {
-      entrees.forEach((en) => en.target.classList.toggle("on", en.isIntersecting));
-    }, { rootMargin: "-35% 0px -35% 0px" });
-    box.querySelectorAll(".v").forEach((v) => observateur.observe(v));
-  }
-}
-
-/* ---------- Chrono de session ---------- */
-function demarrerChrono() {
-  clearInterval(chrono);
-  const maj = async () => {
-    const debut = Number(sessionStorage.getItem(CLE_SESSION_START)) || Date.now();
-    const reste = DUREE_MAX_MS - (Date.now() - debut);
-    if (reste <= 0) {
-      clearInterval(chrono);
-      sessionStorage.removeItem(CLE_SESSION_START);
-      await signOut(auth);
-      afficherMessage("Session expirée après 10 minutes. Reconnecte-toi.", "info");
-      return;
-    }
-    const s = Math.ceil(reste / 1000);
-    $("chrono").textContent = `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
-  };
-  maj();
-  chrono = setInterval(maj, 1000);
-}
-
-/* ---------- Contrôle d'accès ---------- */
-function montrerAcces() {
-  clearInterval(chrono);
-  contenuProtege.style.display = "none";
-  contenuProtege.classList.remove("go");
-  zoneAcces.style.display = "flex";
-}
-
-async function verifierAcces(user) {
-  if (!user) { sessionStorage.removeItem(CLE_SESSION_START); montrerAcces(); return; }
-
-  const maintenant = Date.now();
-  const debut = Number(sessionStorage.getItem(CLE_SESSION_START));
-  if (!debut) {
-    sessionStorage.setItem(CLE_SESSION_START, String(maintenant));
-  } else if (maintenant - debut > DUREE_MAX_MS) {
-    sessionStorage.removeItem(CLE_SESSION_START);
-    await signOut(auth);
-    montrerAcces();
-    afficherMessage("Session expirée après 10 minutes. Reconnecte-toi.", "info");
-    return;
-  }
-
-  try {
-    const snap = await getDoc(doc(db, "utilisateur", user.uid));
-    if (snap.exists() && snap.data().approuve === true) {
-      zoneAcces.style.display = "none";
-      contenuProtege.style.display = "block";
-      afficherMessage("");
-      lancerAnimations();
-      demarrerChrono();
-    } else {
-      montrerAcces();
-      afficherMessage("Ton compte est en attente d'approbation.", "info");
-    }
-  } catch (err) {
-    montrerAcces();
-    afficherMessage("Impossible de vérifier ton compte. Réessaie.", "erreur");
-  }
-}
-
-try { await setPersistence(auth, browserSessionPersistence); }
-catch (err) { console.error("Erreur de persistance :", err); }
-
-onAuthStateChanged(auth, verifierAcces);
-</script>
-</body>
-</html>
+  $("titre").innerHTML = "BORO 700".
